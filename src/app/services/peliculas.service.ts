@@ -28,7 +28,7 @@ export class PeliculasService {
     return this.jsonpGet( directory, params );
   }
 
-  getParseDate( fecha: Date) {
+  private getParseDate( fecha: Date) {
     return `${ fecha.getFullYear()}-${ fecha.getMonth()+1 }-${ fecha.getDate() }`;
   }
 
@@ -40,12 +40,23 @@ export class PeliculasService {
     return this.jsonpGet( directory, params );
   }
 
-  jsonpGet( directory: string, params: string ) {
-    let urlGetPopulares = `${ this.urlMovieDb }${ directory }${ params }`;
-    return this.jsonp.get( urlGetPopulares + this.concatDefaultParams() ).pipe(map( res => res.json() ));
+  getPopularesNinos() {
+    let directory = "/discover/movie";
+
+    let certification_country = "?certification_country=US"
+    let certification_lte = "&certification.lte=G"
+    let sort_by = "&sort_by=popularity.desc";
+    let params = certification_country + certification_lte + sort_by;
+
+    return this.jsonpGet( directory, params );
   }
 
-  concatDefaultParams() {
+  private jsonpGet( directory: string, params: string ) {
+    let urlGetPopulares = `${ this.urlMovieDb }${ directory }${ params }`;
+    return this.jsonp.get( urlGetPopulares + this.concatDefaultParams() ).pipe(map( res => res.json().results ));
+  }
+
+  private concatDefaultParams() {
     let api_key = `&api_key=${ this.apikey }`;
     let language = "&language=es";
     let callback = "&callback=JSONP_CALLBACK";
