@@ -8,9 +8,14 @@ import { PeliculasService } from '../../services/peliculas.service';
 })
 export class HomeComponent implements OnInit {
 
+  cartelera: any;
+
   constructor( private _ps: PeliculasService ) {
     this._ps.getcartelera().subscribe(
-      data => console.log(data)
+      data => {
+        this.cartelera = data.results;
+        console.log( this.cartelera[0].backdrop_path);
+      }
     );
   }
 
