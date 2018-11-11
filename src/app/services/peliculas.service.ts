@@ -13,10 +13,43 @@ export class PeliculasService {
 
   constructor( private jsonp: Jsonp ) { }
 
-  getPopulares() {
-    let url = `${ this.urlMovieDb }/discover/movie?sort_by=popularity.desc&api_key=${ this.apikey }&language=es&callback=JSONP_CALLBACK`;
+  getcartelera() {
+    let directory = "/discover/movie";
+    let desde = this.getParseDate(new Date());
+    let date = new Date();
+    date.setDate( new Date().getDate() + 7);
+    let hasta = this.getParseDate(date);
 
-    return this.jsonp.get( url ).pipe(map( res => res.json() ));
+    let gte = "?primary_release_date.gte=" + desde;
+    let lte = "&primary_release_date.lte=" + hasta;
+
+    let params = gte + lte;
+
+    return this.jsonpGet( directory, params );
+  }
+
+  getParseDate( fecha: Date) {
+    return `${ fecha.getFullYear()}-${ fecha.getMonth()+1 }-${ fecha.getDate() }`;
+  }
+
+  getPopulares() {
+    let directory = "/discover/movie";
+    let sort_by = "?sort_by=popularity.desc";
+    let params = sort_by;
+
+    return this.jsonpGet( directory, params );
+  }
+
+  jsonpGet( directory: string, params: string ) {
+    let urlGetPopulares = `${ this.urlMovieDb }${ directory }${ params }`;
+    return this.jsonp.get( urlGetPopulares + this.concatDefaultParams() ).pipe(map( res => res.json() ));
+  }
+
+  concatDefaultParams() {
+    let api_key = `&api_key=${ this.apikey }`;
+    let language = "&language=es";
+    let callback = "&callback=JSONP_CALLBACK";
+    return api_key + language + callback;
   }
 
 }
