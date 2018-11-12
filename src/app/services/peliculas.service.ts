@@ -10,6 +10,7 @@ export class PeliculasService {
 
   private apikey: string = "208e86a842adb3d0297f99095bb0d427";
   private urlMovieDb: string = "https://api.themoviedb.org/3";
+  peliculas: any[] = [];
 
   constructor( private jsonp: Jsonp ) { }
 
@@ -51,9 +52,23 @@ export class PeliculasService {
     return this.jsonpGet( directory, params );
   }
 
+  buscarPelicula( texto: string) {
+    let directory = "/search/movie";
+    let query = "?query=" + texto;
+    let sort_by = "&sort_by=popularity.desc"
+    let  params = query + sort_by;
+
+    return this.jsonpGet( directory, params );
+
+  }
+
   private jsonpGet( directory: string, params: string ) {
     let urlGetPopulares = `${ this.urlMovieDb }${ directory }${ params }`;
-    return this.jsonp.get( urlGetPopulares + this.concatDefaultParams() ).pipe(map( res => res.json().results ));
+    return this.jsonp.get( urlGetPopulares + this.concatDefaultParams() )
+                     .pipe(map( res => {
+                       this.peliculas = res.json().results;
+                       return res.json().results;
+                     }));
   }
 
   private concatDefaultParams() {
