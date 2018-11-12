@@ -15,15 +15,16 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row animated fadeIn">
     <div class="card-columns">
 
       <div class="card" *ngFor="let pelicula of _ps.peliculas">
-        <img class="card-img-top" [src]=" pelicula | peliculaImagen" [alt]="pelicula.original_title">
+        <img class="card-img-top puntero" [src]=" pelicula | peliculaImagen" [alt]="pelicula.original_title">
         <div class="card-body">
         <h5 class="card-title">{{ pelicula.original_title }}</h5>
         <p class="card-text text-justify">{{ pelicula.overview | slice:0:250 }}...</p>
-        <button class="btn btn-outline-primary btn-block">ver más</button>
+        <button class="btn btn-outline-primary btn-block"
+                [routerLink]="['/pelicula', pelicula.id, 'buscar', buscar]">ver más</button>
       </div>
 
     </div>

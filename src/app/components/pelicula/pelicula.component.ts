@@ -10,13 +10,19 @@ import { ActivatedRoute } from '@angular/router';
 export class PeliculaComponent implements OnInit {
 
   pelicula: any;
+  regresarA: string;
+  busqueda: string = "";
 
   constructor( private _ps: PeliculasService, private _ar: ActivatedRoute) {
     this._ar.params.subscribe( params => {
-      console.log('params[id]:' + params['id']);
-      console.log('params[pag]: ' + params['pag']);
-
-      this._ps.getPelicula(params['id']).subscribe( data => this.pelicula = data);
+      this.regresarA = params['pag'];
+      if( params['busqueda']) {
+        this.busqueda = params['busqueda'];
+      }
+      this._ps.getPelicula(params['id']).subscribe( data => {
+        this.pelicula = data;
+        console.log(this.pelicula);
+      });
     });
   }
 
