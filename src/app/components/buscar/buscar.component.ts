@@ -13,7 +13,6 @@ export class BuscarComponent implements OnInit {
 
   constructor( private _ps: PeliculasService, private _ar: ActivatedRoute ) {
     this._ar.params.subscribe( params => {
-      console.log('params[texto]' + params['texto']);
       if( params['texto'] ) {
         this.buscar = params['texto'];
         this.buscarPelicula();

@@ -15,7 +15,6 @@ export class HomeComponent implements OnInit {
   constructor( private _ps: PeliculasService ) {
     this._ps.getcartelera().subscribe( data => {
         this.cartelera = data;
-        console.log( this.cartelera[0].backdrop_path);
       }
     );
 

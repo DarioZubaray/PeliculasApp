@@ -14,6 +14,18 @@ export class PeliculasService {
 
   constructor( private jsonp: Jsonp ) { }
 
+  getPelicula( id: string ) {
+    let directory = "/movie";
+
+    let api_key = `?api_key=${ this.apikey }`;
+    let language = "&language=es";
+    let callback = "&callback=JSONP_CALLBACK";
+    let params = id + api_key + language + callback;
+
+    let url = `${ this.urlMovieDb }${ directory }/${ params }`;
+    return this.jsonp.get( url ).pipe(map( res => res.json()));
+  }
+
   getcartelera() {
     let directory = "/discover/movie";
     let desde = this.getParseDate(new Date());
@@ -63,8 +75,8 @@ export class PeliculasService {
   }
 
   private jsonpGet( directory: string, params: string ) {
-    let urlGetPopulares = `${ this.urlMovieDb }${ directory }${ params }`;
-    return this.jsonp.get( urlGetPopulares + this.concatDefaultParams() )
+    let url = `${ this.urlMovieDb }${ directory }${ params }`;
+    return this.jsonp.get( url + this.concatDefaultParams() )
                      .pipe(map( res => {
                        this.peliculas = res.json().results;
                        return res.json().results;
